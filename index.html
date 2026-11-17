@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Shree Homemade Food | Quality is Our Identity</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-cream: #FBF7F0;
+      --card-bg: #FFFFFF;
+      --maroon: #6B1D1D;
+      --maroon-dark: #4A1010;
+      --gold: #C59B27;
+      --gold-light: #EFE3C2;
+      --text-dark: #2C1E16;
+      --text-muted: #6E5D53;
+      --border-subtle: #E6D8C3;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: var(--bg-cream);
+      color: var(--text-dark);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      line-height: 1.6;
+      background-image: radial-gradient(#E5D7C1 0.75px, transparent 0.75px);
+      background-size: 24px 24px;
+    }
+
+    header {
+      background: linear-gradient(180deg, #FFFDF9 0%, #F7EFE1 100%);
+      border-bottom: 2px solid var(--gold);
+      padding: 2.5rem 1.25rem 2rem;
+      text-align: center;
+    }
+
+    .shree-emblem {
+      display: inline-block;
+      color: var(--maroon);
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.25rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      padding: 0.2rem 1.1rem;
+      border: 1.5px solid var(--gold);
+      border-radius: 999px;
+      background: #FFF;
+      margin-bottom: 0.75rem;
+    }
+
+    h1 {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(1.85rem, 4vw, 2.85rem);
+      color: var(--maroon);
+      letter-spacing: 1.5px;
+      font-weight: 700;
+      margin-bottom: 0.25rem;
+    }
+
+    .tagline {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.3rem;
+      font-style: italic;
+      color: #7A5C18;
+      margin-bottom: 0.75rem;
+    }
+
+    .header-meta {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 0.75rem 1.5rem;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .container {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 2rem 1.25rem 6rem;
+    }
+
+    .category-bar {
+      display: flex;
+      justify-content: center;
+      gap: 0.75rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .cat-btn {
+      background: #FFF;
+      border: 1px solid var(--border-subtle);
+      color: var(--text-dark);
+      padding: 0.5rem 1.25rem;
+      border-radius: 999px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .cat-btn.active, .cat-btn:hover {
+      background: var(--maroon);
+      color: #FFF;
+      border-color: var(--maroon);
+    }
+
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+      gap: 1.75rem;
+    }
+
+    .product-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-subtle);
+      border-radius: 14px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 6px 20px rgba(74, 16, 16, 0.04);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .product-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 26px rgba(74, 16, 16, 0.08);
+      border-color: var(--gold);
+    }
+
+    .product-img-wrap {
+      width: 100%;
+      height: 200px;
+      background: #F4ECE0;
+      position: relative;
+      overflow: hidden;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .product-img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .cat-badge {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      background: rgba(255, 253, 249, 0.94);
+      color: var(--maroon);
+      border: 1px solid var(--gold);
+      font-size: 0.72rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      padding: 0.2rem 0.65rem;
+      border-radius: 999px;
+    }
+
+    .product-body {
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+
+    .product-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.45rem;
+      font-weight: 700;
+      color: var(--maroon);
+      margin-bottom: 0.15rem;
+    }
+
+    .product-rate {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+      font-weight: 500;
+    }
+
+    .controls-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.65rem;
+      margin-bottom: 1rem;
+      margin-top: auto;
+    }
+
+    .control-group label {
+      display: block;
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-muted);
+      margin-bottom: 0.25rem;
+      font-weight: 600;
+    }
+
+    select {
+      width: 100%;
+      padding: 0.5rem 0.6rem;
+      border-radius: 8px;
+      border: 1px solid var(--border-subtle);
+      background: #FFFDF9;
+      color: var(--text-dark);
+      font-family: inherit;
+      font-size: 0.88rem;
+      cursor: pointer;
+    }
+
+    .qty-stepper {
+      display: flex;
+      align-items: center;
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      background: #FFFDF9;
+      overflow: hidden;
+    }
+
+    .qty-stepper button {
+      background: none;
+      border: none;
+      width: 32px;
+      height: 35px;
+      font-size: 1.1rem;
+      color: var(--maroon);
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .qty-stepper button:hover { background: var(--gold-light); }
+
+    .qty-stepper span {
+      flex: 1;
+      text-align: center;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    .add-btn {
+      width: 100%;
+      padding: 0.7rem;
+      background: var(--maroon);
+      color: #FFF;
+      border: none;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+
+    .add-btn:hover { background: var(--maroon-dark); }
+
+    .floating-cart-bar {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: calc(100% - 2rem);
+      max-width: 680px;
+      background: var(--maroon-dark);
+      color: #FFF;
+      border: 1.5px solid var(--gold);
+      border-radius: 14px;
+      padding: 0.9rem 1.35rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+      z-index: 90;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+
+    .floating-cart-bar.hidden {
+      transform: translate(-50%, 140%);
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .cart-summary-text strong { font-size: 1rem; color: #F7DF94; }
+    .cart-summary-text small { display: block; font-size: 0.8rem; color: #E8DCD5; }
+
+    .view-cart-btn {
+      background: var(--gold);
+      color: #231409;
+      border: none;
+      padding: 0.65rem 1.25rem;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(30, 14, 10, 0.65);
+      backdrop-filter: blur(3px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      z-index: 100;
+    }
+
+    .modal-backdrop.open { display: flex; }
+
+    .modal-box {
+      background: #FFFDF9;
+      border: 1.5px solid var(--gold);
+      border-radius: 16px;
+      width: 100%;
+      max-width: 560px;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 1.75rem;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border-subtle);
+      padding-bottom: 0.85rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .modal-header h2 { font-family: 'Cinzel', serif; color: var(--maroon); font-size: 1.35rem; }
+    .close-modal { background: none; border: none; font-size: 1.5rem; color: var(--text-muted); cursor: pointer; }
+
+    .cart-items-list {
+      margin-bottom: 1.25rem;
+      border-bottom: 1px solid var(--border-subtle);
+      padding-bottom: 1rem;
+    }
+
+    .cart-item-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.6rem 0;
+      border-bottom: 1px dashed #EADFCB;
+      font-size: 0.92rem;
+    }
+
+    .remove-item-btn {
+      background: none; border: none; color: #B42318; font-size: 0.8rem; cursor: pointer; text-decoration: underline;
+    }
+
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.9rem; }
+    .form-group { margin-bottom: 0.9rem; }
+    .form-group.full { grid-column: 1 / -1; }
+    .form-group label { display: block; font-size: 0.82rem; font-weight: 600; color: var(--text-dark); margin-bottom: 0.3rem; }
+    .form-group input, .form-group textarea {
+      width: 100%; padding: 0.6rem 0.75rem; border: 1px solid var(--border-subtle); border-radius: 8px; font-family: inherit; font-size: 0.92rem; background: #FFF;
+    }
+
+    .delivery-toggle { display: grid; grid-template-columns: 1fr 1fr; gap: 0.65rem; }
+    .delivery-option {
+      border: 1.5px solid var(--border-subtle); border-radius: 10px; padding: 0.7rem; text-align: center; cursor: pointer; background: #FFF; font-weight: 600; font-size: 0.9rem;
+    }
+    .delivery-option.active { border-color: var(--maroon); background: #FDF5F5; color: var(--maroon); }
+
+    .delivery-note {
+      margin-top: 0.65rem; padding: 0.75rem 0.9rem; background: #FBF4E4; border-left: 3px solid var(--gold); border-radius: 6px; font-size: 0.85rem; color: #5C4312;
+    }
+
+    .whatsapp-submit-btn {
+      width: 100%; margin-top: 1rem; padding: 0.9rem; background: #1F7A4C; color: #FFF; border: none; border-radius: 10px; font-size: 1rem; font-weight: 700; cursor: pointer;
+    }
+
+    footer { text-align: center; padding: 2rem 1rem; border-top: 1px solid var(--border-subtle); color: var(--text-muted); font-size: 0.85rem; }
+
+    @media (max-width: 600px) { .form-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="shree-emblem">॥ श्री ॥</div>
+    <h1>SHREE HOMEMADE FOOD</h1>
+    <p class="tagline">Quality is Our Identity</p>
+    <div class="header-meta">
+      <span>✦ Made with Pure Ingredients</span>
+      <span>✦ Freshly Prepared on Advance Order</span>
+      <span>✦ Contact: Pradnya Tamhankar (9925481218)</span>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="category-bar">
+      <button class="cat-btn active" onclick="filterCategory('All', this)">All Specialties</button>
+      <button class="cat-btn" onclick="filterCategory('Snacks', this)">Traditional Snacks</button>
+      <button class="cat-btn" onclick="filterCategory('Sweets', this)">Festive Sweets</button>
+    </div>
+
+    <div class="product-grid" id="productGrid"></div>
+  </main>
+
+  <div class="floating-cart-bar hidden" id="floatingCartBar">
+    <div class="cart-summary-text">
+      <strong id="cartCountLabel">0 Packs Selected</strong>
+      <small id="cartWeightLabel">Total Weight: 0g</small>
+    </div>
+    <button class="view-cart-btn" onclick="openCheckout()">Review Order &rarr;</button>
+  </div>
+
+  <div class="modal-backdrop" id="checkoutModal">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h2>Your Order Slip</h2>
+        <button class="close-modal" onclick="closeCheckout()">&times;</button>
+      </div>
+
+      <div class="cart-items-list" id="cartItemsList"></div>
+
+      <form id="orderForm" onsubmit="submitOrder(event)">
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="custName">Full Name *</label>
+            <input type="text" id="custName" required placeholder="e.g. Aarav Joshi" />
+          </div>
+          <div class="form-group">
+            <label for="custPhone">WhatsApp / Phone Number *</label>
+            <input type="tel" id="custPhone" required placeholder="10-digit mobile number" />
+          </div>
+          <div class="form-group">
+            <label for="needDate">Order Need Date *</label>
+            <input type="date" id="needDate" required />
+          </div>
+          <div class="form-group">
+            <label for="needTime">Order Need Time *</label>
+            <input type="time" id="needTime" required />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Delivery Method *</label>
+          <div class="delivery-toggle">
+            <div class="delivery-option active" id="optPorter" onclick="setDeliveryMethod('Porter')">
+              🛵 Porter Delivery
+            </div>
+            <div class="delivery-option" id="optPickup" onclick="setDeliveryMethod('Self Pickup')">
+              🏠 Self Pickup
+            </div>
+          </div>
+          <div class="delivery-note" id="deliveryNote">
+            <strong>Porter Delivery Selected:</strong> After submitting, please share your exact drop location / address directly on our WhatsApp number (<strong>9925481218</strong>).
+          </div>
+        </div>
+
+        <div class="form-group full">
+          <label for="custSpecs">Special Specifications / Instructions (Optional)</label>
+          <textarea id="custSpecs" rows="2" placeholder="e.g. Less spicy, gift packing, separate packs..."></textarea>
+        </div>
+
+        <button type="submit" class="whatsapp-submit-btn">
+          Send Order Slip on WhatsApp
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <footer>
+    Shree Homemade Food &bull; Pradnya Tamhankar &bull; Vadodara &bull; Please Place Your Orders in Advance
+  </footer>
+
+  <script>
+    const OWNER_WHATSAPP = "919925481218";
+    const STORAGE_PRODUCTS_KEY = "shree_products_v1";
+    const STORAGE_ORDERS_KEY = "shree_orders_v1";
+
+    function makeFoodIllustration(label, accentColor) {
+      const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="600" height="400" viewBox="0 0 600 400"><defs><radialGradient id="g" cx="50%" cy="50%" r="60%"><stop offset="0%" stop-color="#FFFDF8"/><stop offset="100%" stop-color="#EFE3CE"/></radialGradient></defs><rect width="600" height="400" fill="url(#g)"/><circle cx="300" cy="185" r="95" fill="${accentColor}" opacity="0.16"/><circle cx="300" cy="185" r="72" fill="none" stroke="${accentColor}" stroke-width="2.5" stroke-dasharray="6 6"/><text x="300" y="192" font-family="Georgia, serif" font-size="22" font-weight="bold" fill="#6B1D1D" text-anchor="middle">${label}</text><text x="300" y="330" font-family="sans-serif" font-size="13" letter-spacing="3" fill="#8C6D3F" text-anchor="middle">SHREE HOMEMADE FOOD</text></svg>`;
+      return "data:image/svg+xml;utf8," + encodeURIComponent(svg);
+    }
+
+    const DEFAULT_PRODUCTS = [
+      { id: "p1", name: "Nylon Poha Chivda", category: "Snacks", price: 380, unitType: "weight", image: makeFoodIllustration("Nylon Poha Chivda", "#D4A017") },
+      { id: "p2", name: "Churmura Chivda", category: "Snacks", price: 500, unitType: "weight", image: makeFoodIllustration("Churmura Chivda", "#C58917") },
+      { id: "p3", name: "Makai Chivda", category: "Snacks", price: 500, unitType: "weight", image: makeFoodIllustration("Makai Chivda", "#D99B26") },
+      { id: "p4", name: "Papad Poha", category: "Snacks", price: 350, unitType: "weight", image: makeFoodIllustration("Papad Poha", "#B8860B") },
+      { id: "p5", name: "Diet Chivda", category: "Snacks", price: 360, unitType: "weight", image: makeFoodIllustration("Diet Chivda", "#8F9779") },
+      { id: "p6", name: "Ukadiche Modak", category: "Sweets", price: 35, unitType: "piece", image: makeFoodIllustration("Ukadiche Modak", "#8B2635") },
+      { id: "p7", name: "Khobre Pak", category: "Sweets", price: 600, unitType: "weight", image: makeFoodIllustration("Khobre Pak", "#A0522D") },
+      { id: "p8", name: "Karanji", category: "Sweets", price: 850, unitType: "weight", image: makeFoodIllustration("Karanji", "#B87333") }
+    ];
+
+    function getProducts() {
+      const saved = localStorage.getItem(STORAGE_PRODUCTS_KEY);
+      if (!saved) {
+        localStorage.setItem(STORAGE_PRODUCTS_KEY, JSON.stringify(DEFAULT_PRODUCTS));
+        return DEFAULT_PRODUCTS;
+      }
+      return JSON.parse(saved);
+    }
+
+    let products = getProducts();
+    let currentCategory = "All";
+    let packCounts = {};
+    let cart = [];
+    let deliveryMethod = "Porter";
+
+    function formatGrams(grams) {
+      if (grams >= 1000) {
+        const kg = grams / 1000;
+        return Number.isInteger(kg) ? `${kg} kg` : `${kg.toFixed(2).replace(/\.?0+$/, '')} kg`;
+      }
+      return `${grams}g`;
+    }
+
+    function renderProducts() {
+      products = getProducts();
+      const grid = document.getElementById("productGrid");
+      grid.innerHTML = "";
+
+      const filtered = currentCategory === "All" ? products : products.filter(p => p.category === currentCategory);
+
+      filtered.forEach(product => {
+        if (!packCounts[product.id]) packCounts[product.id] = 1;
+        const isPiece = product.unitType === "piece";
+        const sizeOptions = isPiece
+          ? `<option value="1">1 Piece</option><option value="5">5 Pieces</option><option value="11" selected>11 Pieces</option><option value="21">21 Pieces</option>`
+          : `<option value="250">250g</option><option value="500">500g</option><option value="750">750g</option><option value="1000">1 kg (1000g)</option><option value="1500">1.5 kg</option><option value="2000">2 kg</option>`;
+
+        const rateText = isPiece ? `₹${product.price} / piece` : `₹${product.price} / kg`;
+
+        const card = document.createElement("div");
+        card.className = "product-card";
+        card.innerHTML = `
+          <div class="product-img-wrap">
+            <span class="cat-badge">${product.category}</span>
+            <img src="${product.image}" alt="${product.name}" />
+          </div>
+          <div class="product-body">
+            <h3 class="product-title">${product.name}</h3>
+            <div class="product-rate">${rateText}</div>
+            <div class="controls-row">
+              <div class="control-group">
+                <label>${isPiece ? "Pack Size" : "Weight / Pack"}</label>
+                <select id="size-${product.id}">${sizeOptions}</select>
+              </div>
+              <div class="control-group">
+                <label>No. of Packs</label>
+                <div class="qty-stepper">
+                  <button type="button" onclick="changePackCount('${product.id}', -1)">&minus;</button>
+                  <span id="count-${product.id}">${packCounts[product.id]}</span>
+                  <button type="button" onclick="changePackCount('${product.id}', 1)">+</button>
+                </div>
+              </div>
+            </div>
+            <button type="button" class="add-btn" onclick="addToCart('${product.id}')">+ Add to Order</button>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    function filterCategory(cat, btn) {
+      currentCategory = cat;
+      document.querySelectorAll(".cat-btn").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      renderProducts();
+    }
+
+    function changePackCount(productId, delta) {
+      const next = (packCounts[productId] || 1) + delta;
+      if (next < 1) return;
+      packCounts[productId] = next;
+      document.getElementById(`count-${productId}`).textContent = next;
+    }
+
+    function addToCart(productId) {
+      const product = products.find(p => p.id === productId);
+      const packSize = parseInt(document.getElementById(`size-${productId}`).value, 10);
+      const packs = packCounts[productId] || 1;
+
+      const existing = cart.find(item => item.id === productId && item.packSize === packSize);
+      if (existing) {
+        existing.packs += packs;
+        existing.totalAmount = existing.packs * existing.packSize;
+      } else {
+        cart.push({ id: product.id, name: product.name, unitType: product.unitType, packSize, packs, totalAmount: packs * packSize });
+      }
+
+      packCounts[productId] = 1;
+      document.getElementById(`count-${productId}`).textContent = "1";
+      updateCartBar();
+    }
+
+    function updateCartBar() {
+      const bar = document.getElementById("floatingCartBar");
+      if (cart.length === 0) {
+        bar.classList.add("hidden");
+        return;
+      }
+      bar.classList.remove("hidden");
+      const totalPacks = cart.reduce((sum, item) => sum + item.packs, 0);
+      const totalGrams = cart.filter(item => item.unitType === "weight").reduce((sum, item) => sum + item.totalAmount, 0);
+      const totalPieces = cart.filter(item => item.unitType === "piece").reduce((sum, item) => sum + item.totalAmount, 0);
+
+      document.getElementById("cartCountLabel").textContent = `${totalPacks} Pack${totalPacks > 1 ? "s" : ""} in Order`;
+      let parts = [];
+      if (totalGrams > 0) parts.push(`Snacks/Sweets: ${formatGrams(totalGrams)}`);
+      if (totalPieces > 0) parts.push(`Modak: ${totalPieces} pcs`);
+      document.getElementById("cartWeightLabel").textContent = parts.join(" • ");
+    }
+
+    function openCheckout() {
+      renderCartItems();
+      document.getElementById("checkoutModal").classList.add("open");
+    }
+
+    function closeCheckout() {
+      document.getElementById("checkoutModal").classList.remove("open");
+    }
+
+    function renderCartItems() {
+      const list = document.getElementById("cartItemsList");
+      if (cart.length === 0) { closeCheckout(); return; }
+      list.innerHTML = cart.map((item, idx) => {
+        const sizeLabel = item.unitType === "piece" ? `${item.packSize} pc` : formatGrams(item.packSize);
+        const totalLabel = item.unitType === "piece" ? `${item.totalAmount} pcs` : formatGrams(item.totalAmount);
+        return `
+          <div class="cart-item-row">
+            <div>
+              <strong>${item.name}</strong><br/>
+              <small style="color: var(--text-muted);">${item.packs} pack(s) × ${sizeLabel} = <strong>${totalLabel}</strong></small>
+            </div>
+            <button type="button" class="remove-item-btn" onclick="removeCartItem(${idx})">Remove</button>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function removeCartItem(index) {
+      cart.splice(index, 1);
+      updateCartBar();
+      renderCartItems();
+    }
+
+    function setDeliveryMethod(method) {
+      deliveryMethod = method;
+      document.getElementById("optPorter").classList.toggle("active", method === "Porter");
+      document.getElementById("optPickup").classList.toggle("active", method === "Self Pickup");
+      const note = document.getElementById("deliveryNote");
+      if (method === "Porter") {
+        note.innerHTML = `<strong>Porter Delivery Selected:</strong> After submitting, please send your drop address on our WhatsApp number (<strong>9925481218</strong>).`;
+      } else {
+        note.innerHTML = `<strong>Self Pickup Selected:</strong> After submitting, we will send our pickup address to your WhatsApp number.`;
+      }
+    }
+
+    function submitOrder(e) {
+      e.preventDefault();
+      if (cart.length === 0) return;
+
+      const orderId = "SHF-" + Math.floor(1000 + Math.random() * 9000);
+      const customerName = document.getElementById("custName").value.trim();
+      const customerPhone = document.getElementById("custPhone").value.trim();
+      const needDate = document.getElementById("needDate").value;
+      const needTime = document.getElementById("needTime").value;
+      const specs = document.getElementById("custSpecs").value.trim();
+
+      const orderRecord = { orderId, createdAt: new Date().toISOString(), customerName, customerPhone, needDate, needTime, deliveryMethod, specs, items: JSON.parse(JSON.stringify(cart)) };
+
+      const existingOrders = JSON.parse(localStorage.getItem(STORAGE_ORDERS_KEY) || "[]");
+      existingOrders.unshift(orderRecord);
+      localStorage.setItem(STORAGE_ORDERS_KEY, JSON.stringify(existingOrders));
+
+      const itemLines = cart.map((item, i) => {
+        const packLabel = item.unitType === "piece" ? `${item.packSize} pc` : formatGrams(item.packSize);
+        const totalLabel = item.unitType === "piece" ? `${item.totalAmount} pcs` : formatGrams(item.totalAmount);
+        return `${i + 1}. ${item.name} — ${item.packs} pack(s) of ${packLabel} (Total: ${totalLabel})`;
+      }).join("\n");
+
+      const deliveryInstruction = deliveryMethod === "Porter" ? "Delivery: Porter (I am sending my delivery address below)" : "Delivery: Self Pickup (Please share your pickup address on my number)";
+
+      const slipText = `॥ श्री ॥\n*SHREE HOMEMADE FOOD — ORDER SLIP*\nOrder ID: *${orderId}*\n-----------------------------\n*Customer:* ${customerName}\n*Phone:* ${customerPhone}\n*Need Date:* ${needDate}\n*Need Time:* ${needTime}\n*${deliveryInstruction}*\n-----------------------------\n*ORDER ITEMS:*\n${itemLines}\n${specs ? `\n*Special Instructions:* ${specs}` : ""}\n-----------------------------\nThank you!`;
+
+      cart = [];
+      updateCartBar();
+      closeCheckout();
+      document.getElementById("orderForm").reset();
+
+      window.open(`https://wa.me/${OWNER_WHATSAPP}?text=${encodeURIComponent(slipText)}`, "_blank");
+    }
+
+    document.getElementById("needDate").min = new Date().toISOString().split("T")[0];
+    renderProducts();
+  </script>
+</body>
+</html>
