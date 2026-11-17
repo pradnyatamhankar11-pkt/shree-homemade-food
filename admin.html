@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Owner Dashboard | Shree Homemade Food</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-cream: #FBF7F0;
+      --maroon: #6B1D1D;
+      --maroon-dark: #4A1010;
+      --gold: #C59B27;
+      --text-dark: #2C1E16;
+      --text-muted: #6E5D53;
+      --border-subtle: #E6D8C3;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: var(--bg-cream);
+      color: var(--text-dark);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      line-height: 1.5;
+    }
+
+    .lock-screen {
+      position: fixed; inset: 0; background: var(--bg-cream); display: flex; align-items: center; justify-content: center; z-index: 200; padding: 1rem;
+    }
+    .lock-card {
+      background: #FFF; border: 1.5px solid var(--gold); border-radius: 16px; padding: 2rem; width: 100%; max-width: 380px; text-align: center; box-shadow: 0 12px 30px rgba(74, 16, 16, 0.08);
+    }
+    .lock-card h2 { font-family: 'Cinzel', serif; color: var(--maroon); margin-bottom: 0.4rem; }
+    .lock-card p { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.25rem; }
+    .lock-card input { width: 100%; padding: 0.7rem; border: 1px solid var(--border-subtle); border-radius: 8px; margin-bottom: 0.85rem; font-size: 0.95rem; }
+    .forgot-link { display: block; margin-top: 0.75rem; font-size: 0.82rem; color: var(--maroon); text-decoration: underline; cursor: pointer; }
+
+    header {
+      background: var(--maroon-dark); color: #FFF; padding: 1.25rem 1.5rem; border-bottom: 2px solid var(--gold); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;
+    }
+    header h1 { font-family: 'Cinzel', serif; font-size: 1.35rem; color: #F8E2A2; }
+    .store-link { color: #FFF; text-decoration: none; font-size: 0.85rem; border: 1px solid var(--gold); padding: 0.4rem 0.9rem; border-radius: 999px; }
+
+    .nav-tabs {
+      background: #FFFDF9; border-bottom: 1px solid var(--border-subtle); display: flex; gap: 0.5rem; padding: 0.75rem 1.5rem; overflow-x: auto;
+    }
+    .tab-btn {
+      background: none; border: 1px solid transparent; padding: 0.6rem 1.15rem; border-radius: 8px; font-family: inherit; font-size: 0.9rem; font-weight: 600; color: var(--text-muted); cursor: pointer; white-space: nowrap;
+    }
+    .tab-btn.active { background: var(--maroon); color: #FFF; }
+
+    .container { max-width: 1120px; margin: 0 auto; padding: 1.75rem 1.25rem 4rem; }
+    .page-section { display: none; }
+    .page-section.active { display: block; }
+
+    .section-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 0.75rem; }
+    .section-top h2 { font-family: 'Cinzel', serif; color: var(--maroon); font-size: 1.4rem; }
+
+    .btn-primary { background: var(--maroon); color: #FFF; border: none; padding: 0.65rem 1.25rem; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 0.9rem; }
+    .btn-outline-danger { background: #FFF; color: #B42318; border: 1px solid #F3B7B2; padding: 0.45rem 0.9rem; border-radius: 8px; font-size: 0.82rem; font-weight: 600; cursor: pointer; }
+    .btn-outline-primary { background: #FFF; color: var(--maroon); border: 1px solid var(--border-subtle); padding: 0.45rem 0.9rem; border-radius: 8px; font-size: 0.82rem; font-weight: 600; cursor: pointer; }
+
+    .orders-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); gap: 1.25rem; }
+    .order-card {
+      background: #FFF; border: 1px solid var(--border-subtle); border-left: 4px solid var(--maroon); border-radius: 12px; padding: 1.25rem; box-shadow: 0 4px 14px rgba(0,0,0,0.03);
+    }
+    .order-card-head { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #F0E6D6; padding-bottom: 0.65rem; margin-bottom: 0.75rem; }
+    .order-id-badge { font-weight: 700; color: var(--maroon); font-size: 0.95rem; }
+    .delivery-pill { font-size: 0.75rem; font-weight: 700; padding: 0.2rem 0.6rem; border-radius: 999px; background: #FDF3DC; color: #7A540E; border: 1px solid var(--gold); }
+    .cust-meta { font-size: 0.88rem; margin-bottom: 0.85rem; }
+    .cust-meta div { margin-bottom: 0.2rem; }
+    .order-items-box { background: #FBF8F3; border: 1px solid #EDE2D2; border-radius: 8px; padding: 0.75rem; font-size: 0.88rem; margin-bottom: 0.75rem; }
+    .order-items-box ul { padding-left: 1.15rem; }
+    .specs-box { background: #FFF5F5; border-left: 3px solid #B42318; padding: 0.55rem 0.75rem; font-size: 0.84rem; color: #6B1D1D; border-radius: 4px; margin-bottom: 0.85rem; }
+    .order-actions { display: flex; justify-content: space-between; align-items: center; margin-top: 0.5rem; }
+    .wa-reply-link { font-size: 0.82rem; font-weight: 600; color: #1F7A4C; text-decoration: none; }
+
+    .table-wrap { background: #FFF; border: 1px solid var(--border-subtle); border-radius: 12px; overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; text-align: left; }
+    th, td { padding: 1rem 1.25rem; border-bottom: 1px solid #EFE5D6; }
+    th { background: #F7EFE1; color: var(--maroon); font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.6px; }
+    .total-highlight { font-weight: 700; font-size: 1.05rem; color: var(--maroon); }
+
+    .two-col-layout { display: grid; grid-template-columns: 1fr 1.2fr; gap: 1.75rem; }
+    .card-panel { background: #FFF; border: 1px solid var(--border-subtle); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; }
+
+    .form-group { margin-bottom: 1rem; }
+    .form-group label { display: block; font-size: 0.84rem; font-weight: 600; margin-bottom: 0.35rem; }
+    .form-group input, .form-group select {
+      width: 100%; padding: 0.65rem 0.75rem; border: 1px solid var(--border-subtle); border-radius: 8px; font-family: inherit; font-size: 0.92rem; background: #FFF;
+    }
+
+    .drop-zone {
+      border: 2px dashed var(--gold); background: #FFFDF8; border-radius: 12px; padding: 1.5rem; text-align: center; cursor: pointer; transition: background 0.2s ease;
+    }
+    .drop-zone.dragover { background: #F6E9C8; }
+    .drop-zone p { font-size: 0.88rem; color: var(--text-muted); }
+    .preview-img { max-height: 120px; margin-top: 0.75rem; border-radius: 8px; display: none; margin-inline: auto; object-fit: cover; border: 1px solid var(--border-subtle); }
+
+    .menu-item-row {
+      display: flex; align-items: center; justify-content: space-between; padding: 0.75rem 0; border-bottom: 1px solid #F0E6D6; gap: 0.75rem;
+    }
+    .menu-item-info { display: flex; align-items: center; gap: 0.75rem; }
+    .menu-item-info img { width: 48px; height: 48px; border-radius: 8px; object-fit: cover; border: 1px solid var(--border-subtle); }
+    .menu-item-actions { display: flex; gap: 0.5rem; align-items: center; }
+
+    .empty-state { text-align: center; padding: 3rem 1rem; color: var(--text-muted); background: #FFF; border: 1px dashed var(--border-subtle); border-radius: 12px; }
+
+    @media (max-width: 768px) { .two-col-layout { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+
+  <div class="lock-screen" id="lockScreen">
+    <div class="lock-card">
+      <h2>॥ श्री ॥ Owner Access</h2>
+      <p>Shree Homemade Food Dashboard</p>
+      <input type="text" id="adminUser" placeholder="Username (default: admin)" style="margin-bottom:0.6rem;" />
+      <input type="password" id="adminPassInput" placeholder="Password (default: shree123)" onkeydown="if(event.key==='Enter') unlockDashboard()" />
+      <button class="btn-primary" style="width:100%; margin-bottom:0.5rem;" onclick="unlockDashboard()">Open Dashboard</button>
+      <a class="forgot-link" onclick="forgotPassword()">Forgot Password / Quick Unlock with Number</a>
+    </div>
+  </div>
+
+  <header>
+    <h1>॥ श्री ॥ SHREE HOMEMADE FOOD — OWNER PANEL</h1>
+    <a href="index.html" class="store-link" target="_blank">&larr; View Customer Website</a>
+  </header>
+
+  <nav class="nav-tabs">
+    <button class="tab-btn active" onclick="switchTab('ordersTab', this)">1. Customer Orders</button>
+    <button class="tab-btn" onclick="switchTab('productionTab', this)">2. Total Production to Make</button>
+    <button class="tab-btn" onclick="switchTab('itemsTab', this)">3. Add & Manage Items</button>
+    <button class="tab-btn" onclick="switchTab('settingsTab', this)">4. Security & Credentials</button>
+  </nav>
+
+  <main class="container">
+
+    <section id="ordersTab" class="page-section active">
+      <div class="section-top">
+        <h2>Customer Orders & Specifications</h2>
+        <button class="btn-outline-danger" onclick="clearAllOrders()">Clear Completed Orders</button>
+      </div>
+      <div id="ordersContainer"></div>
+    </section>
+
+    <section id="productionTab" class="page-section">
+      <div class="section-top">
+        <h2>Total Quantity to Prepare (All Active Orders)</h2>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Product Name</th>
+              <th>Category</th>
+              <th>Number of Orders</th>
+              <th>Total Order to be Made</th>
+            </tr>
+          </thead>
+          <tbody id="productionTableBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ADD / EDIT ITEMS SECTION -->
+    <section id="itemsTab" class="page-section">
+      <div class="section-top">
+        <h2 id="formHeading">Add New Product</h2>
+        <button type="button" id="cancelEditBtn" class="btn-outline-danger" style="display:none;" onclick="resetProductForm()">Cancel Edit</button>
+      </div>
+      <div class="two-col-layout">
+        <div class="card-panel">
+          <form id="productForm" onsubmit="saveProduct(event)">
+            <input type="hidden" id="editProductId" />
+            <div class="form-group">
+              <label>Item Name *</label>
+              <input type="text" id="newItemName" required placeholder="e.g. Rava Besan Ladoo" />
+            </div>
+            <div class="form-group">
+              <label>Category *</label>
+              <select id="newItemCategory">
+                <option value="Snacks">Snacks</option>
+                <option value="Sweets">Sweets</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Sold By *</label>
+              <select id="newItemUnitType">
+                <option value="weight">Weight (250g packs & multiples)</option>
+                <option value="piece">Pieces (1, 5, 11, 21 pcs)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Reference Rate (₹ per kg or per piece) *</label>
+              <input type="number" id="newItemPrice" required placeholder="e.g. 550" />
+            </div>
+            <div class="form-group">
+              <label>Product Photo (Drag & Drop or Click)</label>
+              <div class="drop-zone" id="dropZone" onclick="document.getElementById('fileInput').click()">
+                <p>Drag & drop image here, or click to browse</p>
+                <img id="imagePreview" class="preview-img" alt="Preview" />
+                <input type="file" id="fileInput" accept="image/*" style="display:none;" onchange="handleFileSelect(event)" />
+              </div>
+            </div>
+            <button type="submit" class="btn-primary" id="saveProductBtn" style="width:100%;">Save Item to Website</button>
+          </form>
+        </div>
+
+        <div class="card-panel">
+          <h3 style="margin-bottom: 1rem; color: var(--maroon);">Current Menu Items</h3>
+          <div id="menuListContainer"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECURITY SETTINGS -->
+    <section id="settingsTab" class="page-section">
+      <div class="section-top">
+        <h2>Change Username & Password</h2>
+      </div>
+      <div class="card-panel" style="max-width: 500px;">
+        <form onsubmit="updateCredentials(event)">
+          <div class="form-group">
+            <label>New Username *</label>
+            <input type="text" id="newUsername" required placeholder="Enter new username" />
+          </div>
+          <div class="form-group">
+            <label>New Password *</label>
+            <input type="password" id="newPassword" required placeholder="Enter new password" />
+          </div>
+          <button type="submit" class="btn-primary" style="width:100%;">Save New Credentials</button>
+        </form>
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    const STORAGE_PRODUCTS_KEY = "shree_products_v1";
+    const STORAGE_ORDERS_KEY = "shree_orders_v1";
+    const STORAGE_CREDS_KEY = "shree_creds_v1";
+
+    let uploadedImageDataUrl = "";
+
+    function getCreds() {
+      const saved = localStorage.getItem(STORAGE_CREDS_KEY);
+      if (!saved) {
+        const defaultCreds = { username: "admin", password: "shree123" };
+        localStorage.setItem(STORAGE_CREDS_KEY, JSON.stringify(defaultCreds));
+        return defaultCreds;
+      }
+      return JSON.parse(saved);
+    }
+
+    function unlockDashboard() {
+      const user = document.getElementById("adminUser").value.trim();
+      const pass = document.getElementById("adminPassInput").value.trim();
+      const creds = getCreds();
+
+      if ((user === creds.username || user === "admin") && pass === creds.password) {
+        document.getElementById("lockScreen").style.display = "none";
+        refreshAllViews();
+      } else {
+        alert("Incorrect username or password. (Default is username: admin, password: shree123)");
+      }
+    }
+
+    function forgotPassword() {
+      const phoneInput = prompt("Enter owner registered number (9925481218) to unlock instantly:");
+      if (phoneInput === "9925481218") {
+        alert("Number verified! Unlocking dashboard...");
+        document.getElementById("lockScreen").style.display = "none";
+        refreshAllViews();
+      } else if (phoneInput !== null) {
+        alert("Incorrect number entered.");
+      }
+    }
+
+    function updateCredentials(e) {
+      e.preventDefault();
+      const newUsername = document.getElementById("newUsername").value.trim();
+      const newPassword = document.getElementById("newPassword").value.trim();
+      localStorage.setItem(STORAGE_CREDS_KEY, JSON.stringify({ username: newUsername, password: newPassword }));
+      alert("Credentials updated successfully!");
+      e.target.reset();
+    }
+
+    function switchTab(tabId, btn) {
+      document.querySelectorAll(".page-section").forEach(sec => sec.classList.remove("active"));
+      document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+      document.getElementById(tabId).classList.add("active");
+      btn.classList.add("active");
+      refreshAllViews();
+    }
+
+    function formatGrams(grams) {
+      if (grams >= 1000) {
+        const kg = grams / 1000;
+        return Number.isInteger(kg) ? `${kg} kg` : `${kg.toFixed(2).replace(/\.?0+$/, '')} kg`;
+      }
+      return `${grams}g`;
+    }
+
+    function getProducts() { return JSON.parse(localStorage.getItem(STORAGE_PRODUCTS_KEY) || "[]"); }
+    function getOrders() { return JSON.parse(localStorage.getItem(STORAGE_ORDERS_KEY) || "[]"); }
+
+    function renderOrders() {
+      const orders = getOrders();
+      const container = document.getElementById("ordersContainer");
+
+      if (orders.length === 0) {
+        container.innerHTML = `<div class="empty-state">No customer orders recorded yet.</div>`;
+        return;
+      }
+
+      container.innerHTML = `<div class="orders-grid">` + orders.map((ord, idx) => {
+        const itemsHtml = ord.items.map(item => {
+          const sizeLabel = item.unitType === "piece" ? `${item.packSize} pc` : formatGrams(item.packSize);
+          const totalLabel = item.unitType === "piece" ? `${item.totalAmount} pcs` : formatGrams(item.totalAmount);
+          return `<li><strong>${item.name}</strong>: ${item.packs} pack(s) of ${sizeLabel} (<strong>${totalLabel}</strong>)</li>`;
+        }).join("");
+
+        const specsHtml = ord.specs ? `<div class="specs-box"><strong>Customer Specifications:</strong> ${ord.specs}</div>` : "";
+        const cleanPhone = ord.customerPhone.replace(/\D/g, "");
+        const waReplyMsg = ord.deliveryMethod === "Self Pickup" ? `Namaste ${ord.customerName}, thank you for your order (${ord.orderId}) with Shree Homemade Food! Here is our pickup address:` : `Namaste ${ord.customerName}, we have received your order (${ord.orderId}) with Shree Homemade Food!`;
+
+        return `
+          <div class="order-card">
+            <div class="order-card-head">
+              <span class="order-id-badge">${ord.orderId}</span>
+              <span class="delivery-pill">${ord.deliveryMethod}</span>
+            </div>
+            <div class="cust-meta">
+              <div><strong>Name:</strong> ${ord.customerName}</div>
+              <div><strong>Phone:</strong> ${ord.customerPhone}</div>
+              <div><strong>Need Date & Time:</strong> ${ord.needDate} at ${ord.needTime}</div>
+            </div>
+            <div class="order-items-box"><ul>${itemsHtml}</ul></div>
+            ${specsHtml}
+            <div class="order-actions">
+              <a class="wa-reply-link" href="https://wa.me/91${cleanPhone}?text=${encodeURIComponent(waReplyMsg)}" target="_blank">Message Customer &rarr;</a>
+              <button class="btn-outline-danger" onclick="deleteSingleOrder(${idx})">Done / Remove</button>
+            </div>
+          </div>
+        `;
+      }).join("") + `</div>`;
+    }
+
+    function deleteSingleOrder(index) {
+      const orders = getOrders();
+      orders.splice(index, 1);
+      localStorage.setItem(STORAGE_ORDERS_KEY, JSON.stringify(orders));
+      refreshAllViews();
+    }
+
+    function clearAllOrders() {
+      if (confirm("Remove all orders from the dashboard?")) {
+        localStorage.setItem(STORAGE_ORDERS_KEY, "[]");
+        refreshAllViews();
+      }
+    }
+
+    function renderProductionSummary() {
+      const orders = getOrders();
+      const products = getProducts();
+      const tbody = document.getElementById("productionTableBody");
+
+      const totalsMap = {};
+      products.forEach(p => { totalsMap[p.name] = { name: p.name, category: p.category, unitType: p.unitType, totalAmount: 0, orderCount: 0 }; });
+
+      orders.forEach(ord => {
+        ord.items.forEach(item => {
+          if (!totalsMap[item.name]) {
+            totalsMap[item.name] = { name: item.name, category: "Custom", unitType: item.unitType, totalAmount: 0, orderCount: 0 };
+          }
+          totalsMap[item.name].totalAmount += item.totalAmount;
+          totalsMap[item.name].orderCount += 1;
+        });
+      });
+
+      const rows = Object.values(totalsMap);
+      if (rows.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:var(--text-muted);">No items found.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = rows.map(row => {
+        const formattedTotal = row.totalAmount === 0 ? "0" : (row.unitType === "piece" ? `${row.totalAmount} pieces` : formatGrams(row.totalAmount));
+        return `<tr><td><strong>${row.name}</strong></td><td>${row.category}</td><td>${row.orderCount}</td><td class="total-highlight">${formattedTotal}</td></tr>`;
+      }).join("");
+    }
+
+    // Drag & Drop / Upload handlers
+    const dropZone = document.getElementById("dropZone");
+    dropZone.addEventListener("dragover", (e) => { e.preventDefault(); dropZone.classList.add("dragover"); });
+    dropZone.addEventListener("dragleave", () => { dropZone.classList.remove("dragover"); });
+    dropZone.addEventListener("drop", (e) => {
+      e.preventDefault(); dropZone.classList.remove("dragover");
+      const file = e.dataTransfer.files[0];
+      if (file) processImageFile(file);
+    });
+
+    function handleFileSelect(e) {
+      const file = e.target.files[0];
+      if (file) processImageFile(file);
+    }
+
+    function processImageFile(file) {
+      if (!file.type.startsWith("image/")) { alert("Please upload an image file."); return; }
+      const reader = new FileReader();
+      reader.onload = function(event) {
+        const img = new Image();
+        img.onload = function() {
+          const canvas = document.createElement("canvas");
+          const maxW = 500;
+          const scale = Math.min(1, maxW / img.width);
+          canvas.width = img.width * scale;
+          canvas.height = img.height * scale;
+          const ctx = canvas.getContext("2d");
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+          uploadedImageDataUrl = canvas.toDataURL("image/jpeg", 0.85);
+          const preview = document.getElementById("imagePreview");
+          preview.src = uploadedImageDataUrl;
+          preview.style.display = "block";
+        };
+        img.src = event.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    // Add or Edit Product
+    function saveProduct(e) {
+      e.preventDefault();
+      const editId = document.getElementById("editProductId").value;
+      const name = document.getElementById("newItemName").value.trim();
+      const category = document.getElementById("newItemCategory").value;
+      const unitType = document.getElementById("newItemUnitType").value;
+      const price = parseInt(document.getElementById("newItemPrice").value, 10);
+
+      const products = getProducts();
+      let fallbackSvg = "data:image/svg+xml;utf8," + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="600" height="400"><rect width="600" height="400" fill="#F4ECE0"/><text x="300" y="205" font-family="Georgia, serif" font-size="24" font-weight="bold" fill="#6B1D1D" text-anchor="middle">${name}</text></svg>`);
+
+      if (editId) {
+        // Editing existing product
+        const prod = products.find(p => p.id === editId);
+        if (prod) {
+          prod.name = name;
+          prod.category = category;
+          prod.unitType = unitType;
+          prod.price = price;
+          if (uploadedImageDataUrl) prod.image = uploadedImageDataUrl;
+        }
+        alert(`"${name}" updated successfully!`);
+      } else {
+        // Adding new product
+        const newProduct = {
+          id: "p-" + Date.now(),
+          name,
+          category,
+          price,
+          unitType,
+          image: uploadedImageDataUrl || fallbackSvg
+        };
+        products.push(newProduct);
+        alert(`"${name}" added successfully!`);
+      }
+
+      localStorage.setItem(STORAGE_PRODUCTS_KEY, JSON.stringify(products));
+      resetProductForm();
+      refreshAllViews();
+    }
+
+    function editProduct(id) {
+      const products = getProducts();
+      const prod = products.find(p => p.id === id);
+      if (!prod) return;
+
+      document.getElementById("editProductId").value = prod.id;
+      document.getElementById("newItemName").value = prod.name;
+      document.getElementById("newItemCategory").value = prod.category;
+      document.getElementById("newItemUnitType").value = prod.unitType;
+      document.getElementById("newItemPrice").value = prod.price;
+
+      uploadedImageDataUrl = prod.image;
+      const preview = document.getElementById("imagePreview");
+      preview.src = prod.image;
+      preview.style.display = "block";
+
+      document.getElementById("formHeading").textContent = "Edit Product: " + prod.name;
+      document.getElementById("saveProductBtn").textContent = "Update Product";
+      document.getElementById("cancelEditBtn").style.display = "inline-block";
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function resetProductForm() {
+      document.getElementById("productForm").reset();
+      document.getElementById("editProductId").value = "";
+      document.getElementById("imagePreview").style.display = "none";
+      uploadedImageDataUrl = "";
+      document.getElementById("formHeading").textContent = "Add New Product";
+      document.getElementById("saveProductBtn").textContent = "Save Item to Website";
+      document.getElementById("cancelEditBtn").style.display = "none";
+    }
+
+    function renderMenuManager() {
+      const products = getProducts();
+      const container = document.getElementById("menuListContainer");
+      container.innerHTML = products.map((p, idx) => `
+        <div class="menu-item-row">
+          <div class="menu-item-info">
+            <img src="${p.image}" alt="${p.name}" />
+            <div>
+              <strong>${p.name}</strong><br/>
+              <small style="color:var(--text-muted);">${p.category} &bull; ₹${p.price}/${p.unitType === 'piece' ? 'pc' : 'kg'}</small>
+            </div>
+          </div>
+          <div class="menu-item-actions">
+            <button class="btn-outline-primary" onclick="editProduct('${p.id}')">Edit</button>
+            <button class="btn-outline-danger" onclick="deleteProduct(${idx})">Remove</button>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    function deleteProduct(index) {
+      const products = getProducts();
+      if (confirm(`Remove "${products[index].name}" from the website?`)) {
+        products.splice(index, 1);
+        localStorage.setItem(STORAGE_PRODUCTS_KEY, JSON.stringify(products));
+        refreshAllViews();
+      }
+    }
+
+    function refreshAllViews() {
+      renderOrders();
+      renderProductionSummary();
+      renderMenuManager();
+    }
+  </script>
+</body>
+</html>
