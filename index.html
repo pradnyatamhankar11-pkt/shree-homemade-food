@@ -34,22 +34,19 @@
     header {
       background: linear-gradient(180deg, #FFFDF9 0%, #F7EFE1 100%);
       border-bottom: 2px solid var(--gold);
-      padding: 2.5rem 1.25rem 2rem;
+      padding: 2rem 1.25rem 2rem;
       text-align: center;
     }
 
-    .shree-emblem {
-      display: inline-block;
-      color: var(--maroon);
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.25rem;
-      font-weight: 700;
-      letter-spacing: 2px;
-      padding: 0.2rem 1.1rem;
-      border: 1.5px solid var(--gold);
-      border-radius: 999px;
-      background: #FFF;
+    .brand-logo-img {
+      width: 130px;
+      height: 130px;
+      object-fit: contain;
+      border-radius: 50%;
+      box-shadow: 0 4px 15px rgba(107, 29, 29, 0.15);
+      border: 2px solid var(--gold);
       margin-bottom: 0.75rem;
+      background: #FFF;
     }
 
     h1 {
@@ -187,7 +184,7 @@
 
     .controls-row {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 1fr;
       gap: 0.65rem;
       margin-bottom: 1rem;
       margin-top: auto;
@@ -203,18 +200,6 @@
       font-weight: 600;
     }
 
-    select {
-      width: 100%;
-      padding: 0.5rem 0.6rem;
-      border-radius: 8px;
-      border: 1px solid var(--border-subtle);
-      background: #FFFDF9;
-      color: var(--text-dark);
-      font-family: inherit;
-      font-size: 0.88rem;
-      cursor: pointer;
-    }
-
     .qty-stepper {
       display: flex;
       align-items: center;
@@ -227,8 +212,8 @@
     .qty-stepper button {
       background: none;
       border: none;
-      width: 32px;
-      height: 35px;
+      width: 38px;
+      height: 38px;
       font-size: 1.1rem;
       color: var(--maroon);
       cursor: pointer;
@@ -387,7 +372,8 @@
 <body>
 
   <header>
-    <div class="shree-emblem">॥ श्री ॥</div>
+    <!-- Actual Logo Image Added Here -->
+    <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEASABIAAD/2wBDAP//////////////////////////////////////////////////////////////////////////////////////wgALCAApACkBAREA/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD96KKKKACiiigAivx9/bg/bs+Mvj79ojxL4I+FnjnxJ4E8FeB9Tn8O2y6Hcm3udWuIHMdxcSzAFuZFbavIC4wTk0u3W4dbH7B0V8Nfs2/8FQ9f1j4QfCTwr8SvBPiLwv8WPiF4gbwxHrF5pz2Wix3C/ubZpZHO4C5mBfAyMHHOK9M/ah/ba8XfCP9rrwx8IfAfwm1j4h6p4h8Mz+Immsb9LbyY4bhImVgyEHIYYIbkkDHSqktbJ67flf8jf8Ar+v6/U+s6K8i+Gfxo13xB8W9e8Ca1puk2mqeHtLt7i8u9Pu2kh+0S8lEVwCU24Jz0PHauu1D4v+FtL1m/0+71yztrzS0WW8WbMYtYyfkeRmwqqeSMnnBpNW/L89hXuvx/K51FFY3i/xrpngey0271W5+zW+rajb6TbNsf8Ae3E7bIkyAcbn4ycAdyK2aAP/2Q==" alt="Shree Homemade Food Logo" class="brand-logo-img" />
     <h1>SHREE HOMEMADE FOOD</h1>
     <p class="tagline">Quality is Our Identity</p>
     <div class="header-meta">
@@ -527,13 +513,17 @@
       const filtered = currentCategory === "All" ? products : products.filter(p => p.category === currentCategory);
 
       filtered.forEach(product => {
-        if (!packCounts[product.id]) packCounts[product.id] = 1;
         const isPiece = product.unitType === "piece";
-        const sizeOptions = isPiece
-          ? `<option value="1">1 Piece</option><option value="5">5 Pieces</option><option value="11" selected>11 Pieces</option><option value="21">21 Pieces</option>`
-          : `<option value="250">250g</option><option value="500">500g</option><option value="750">750g</option><option value="1000">1 kg (1000g)</option><option value="1500">1.5 kg</option><option value="2000">2 kg</option>`;
+        
+        if (!packCounts[product.id]) {
+          packCounts[product.id] = isPiece ? 5 : 250;
+        }
 
-        const rateText = isPiece ? `₹${product.price} / piece` : `₹${product.price} / kg`;
+        const currentVal = packCounts[product.id];
+        const stepVal = isPiece ? 1 : 250;
+        const minVal = isPiece ? 5 : 250;
+
+        const rateText = isPiece ? `₹${product.price} / piece (Min. 5)` : `₹${product.price} / kg`;
 
         const card = document.createElement("div");
         card.className = "product-card";
@@ -547,15 +537,11 @@
             <div class="product-rate">${rateText}</div>
             <div class="controls-row">
               <div class="control-group">
-                <label>${isPiece ? "Pack Size" : "Weight / Pack"}</label>
-                <select id="size-${product.id}">${sizeOptions}</select>
-              </div>
-              <div class="control-group">
-                <label>No. of Packs</label>
+                <label>${isPiece ? "Select Quantity (Pieces)" : "Select Weight"}</label>
                 <div class="qty-stepper">
-                  <button type="button" onclick="changePackCount('${product.id}', -1)">&minus;</button>
-                  <span id="count-${product.id}">${packCounts[product.id]}</span>
-                  <button type="button" onclick="changePackCount('${product.id}', 1)">+</button>
+                  <button type="button" onclick="changePackSize('${product.id}', -${stepVal}, ${minVal})">&minus;</button>
+                  <span id="count-${product.id}">${isPiece ? currentVal + ' pcs' : formatGrams(currentVal)}</span>
+                  <button type="button" onclick="changePackSize('${product.id}', ${stepVal}, ${minVal})">+</button>
                 </div>
               </div>
             </div>
@@ -573,28 +559,39 @@
       renderProducts();
     }
 
-    function changePackCount(productId, delta) {
-      const next = (packCounts[productId] || 1) + delta;
-      if (next < 1) return;
+    function changePackSize(productId, delta, minVal) {
+      const next = (packCounts[productId] || minVal) + delta;
+      if (next < minVal) return;
       packCounts[productId] = next;
-      document.getElementById(`count-${productId}`).textContent = next;
+      
+      const product = products.find(p => p.id === productId);
+      const isPiece = product && product.unitType === "piece";
+      
+      document.getElementById(`count-${productId}`).textContent = isPiece ? next + ' pcs' : formatGrams(next);
     }
 
     function addToCart(productId) {
       const product = products.find(p => p.id === productId);
-      const packSize = parseInt(document.getElementById(`size-${productId}`).value, 10);
-      const packs = packCounts[productId] || 1;
+      const amountValue = packCounts[productId] || (product.unitType === 'piece' ? 5 : 250);
+      const isPiece = product.unitType === "piece";
 
-      const existing = cart.find(item => item.id === productId && item.packSize === packSize);
+      const existing = cart.find(item => item.id === productId && item.packSize === amountValue);
       if (existing) {
-        existing.packs += packs;
+        existing.packs += 1;
         existing.totalAmount = existing.packs * existing.packSize;
       } else {
-        cart.push({ id: product.id, name: product.name, unitType: product.unitType, packSize, packs, totalAmount: packs * packSize });
+        cart.push({ 
+          id: product.id, 
+          name: product.name, 
+          unitType: product.unitType, 
+          packSize: amountValue, 
+          packs: 1, 
+          totalAmount: amountValue 
+        });
       }
 
-      packCounts[productId] = 1;
-      document.getElementById(`count-${productId}`).textContent = "1";
+      packCounts[productId] = isPiece ? 5 : 250;
+      document.getElementById(`count-${productId}`).textContent = isPiece ? '5 pcs' : '250g';
       updateCartBar();
     }
 
@@ -605,11 +602,11 @@
         return;
       }
       bar.classList.remove("hidden");
-      const totalPacks = cart.reduce((sum, item) => sum + item.packs, 0);
+      const totalItems = cart.reduce((sum, item) => sum + item.packs, 0);
       const totalGrams = cart.filter(item => item.unitType === "weight").reduce((sum, item) => sum + item.totalAmount, 0);
       const totalPieces = cart.filter(item => item.unitType === "piece").reduce((sum, item) => sum + item.totalAmount, 0);
 
-      document.getElementById("cartCountLabel").textContent = `${totalPacks} Pack${totalPacks > 1 ? "s" : ""} in Order`;
+      document.getElementById("cartCountLabel").textContent = `${totalItems} Item Group(s) in Order`;
       let parts = [];
       if (totalGrams > 0) parts.push(`Snacks/Sweets: ${formatGrams(totalGrams)}`);
       if (totalPieces > 0) parts.push(`Modak: ${totalPieces} pcs`);
@@ -629,13 +626,12 @@
       const list = document.getElementById("cartItemsList");
       if (cart.length === 0) { closeCheckout(); return; }
       list.innerHTML = cart.map((item, idx) => {
-        const sizeLabel = item.unitType === "piece" ? `${item.packSize} pc` : formatGrams(item.packSize);
-        const totalLabel = item.unitType === "piece" ? `${item.totalAmount} pcs` : formatGrams(item.totalAmount);
+        const sizeLabel = item.unitType === "piece" ? `${item.totalAmount} pcs` : formatGrams(item.totalAmount);
         return `
           <div class="cart-item-row">
             <div>
               <strong>${item.name}</strong><br/>
-              <small style="color: var(--text-muted);">${item.packs} pack(s) × ${sizeLabel} = <strong>${totalLabel}</strong></small>
+              <small style="color: var(--text-muted);">Quantity: <strong>${sizeLabel}</strong></small>
             </div>
             <button type="button" class="remove-item-btn" onclick="removeCartItem(${idx})">Remove</button>
           </div>
@@ -679,9 +675,8 @@
       localStorage.setItem(STORAGE_ORDERS_KEY, JSON.stringify(existingOrders));
 
       const itemLines = cart.map((item, i) => {
-        const packLabel = item.unitType === "piece" ? `${item.packSize} pc` : formatGrams(item.packSize);
         const totalLabel = item.unitType === "piece" ? `${item.totalAmount} pcs` : formatGrams(item.totalAmount);
-        return `${i + 1}. ${item.name} — ${item.packs} pack(s) of ${packLabel} (Total: ${totalLabel})`;
+        return `${i + 1}. ${item.name} — ${totalLabel}`;
       }).join("\n");
 
       const deliveryInstruction = deliveryMethod === "Porter" ? "Delivery: Porter (I am sending my delivery address below)" : "Delivery: Self Pickup (Please share your pickup address on my number)";
