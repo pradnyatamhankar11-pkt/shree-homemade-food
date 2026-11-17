@@ -62,6 +62,7 @@
     .btn-primary { background: var(--maroon); color: #FFF; border: none; padding: 0.65rem 1.25rem; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 0.9rem; }
     .btn-outline-danger { background: #FFF; color: #B42318; border: 1px solid #F3B7B2; padding: 0.45rem 0.9rem; border-radius: 8px; font-size: 0.82rem; font-weight: 600; cursor: pointer; }
     .btn-outline-primary { background: #FFF; color: var(--maroon); border: 1px solid var(--border-subtle); padding: 0.45rem 0.9rem; border-radius: 8px; font-size: 0.82rem; font-weight: 600; cursor: pointer; }
+    .btn-outline-success { background: #FFF; color: #1F7A4C; border: 1px solid #A8D5BC; padding: 0.45rem 0.9rem; border-radius: 8px; font-size: 0.82rem; font-weight: 600; cursor: pointer; }
 
     .orders-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); gap: 1.25rem; }
     .order-card {
@@ -75,7 +76,7 @@
     .order-items-box { background: #FBF8F3; border: 1px solid #EDE2D2; border-radius: 8px; padding: 0.75rem; font-size: 0.88rem; margin-bottom: 0.75rem; }
     .order-items-box ul { padding-left: 1.15rem; }
     .specs-box { background: #FFF5F5; border-left: 3px solid #B42318; padding: 0.55rem 0.75rem; font-size: 0.84rem; color: #6B1D1D; border-radius: 4px; margin-bottom: 0.85rem; }
-    .order-actions { display: flex; justify-content: space-between; align-items: center; margin-top: 0.5rem; }
+    .order-actions { display: flex; justify-content: space-between; align-items: center; margin-top: 0.5rem; flex-wrap: wrap; gap: 0.5rem; }
     .wa-reply-link { font-size: 0.82rem; font-weight: 600; color: #1F7A4C; text-decoration: none; }
 
     .table-wrap { background: #FFF; border: 1px solid var(--border-subtle); border-radius: 12px; overflow-x: auto; }
@@ -166,7 +167,6 @@
       </div>
     </section>
 
-    <!-- ADD / EDIT ITEMS SECTION -->
     <section id="itemsTab" class="page-section">
       <div class="section-top">
         <h2 id="formHeading">Add New Product</h2>
@@ -217,7 +217,6 @@
       </div>
     </section>
 
-    <!-- SECURITY SETTINGS -->
     <section id="settingsTab" class="page-section">
       <div class="section-top">
         <h2>Change Username & Password</h2>
@@ -343,11 +342,59 @@
             ${specsHtml}
             <div class="order-actions">
               <a class="wa-reply-link" href="https://wa.me/91${cleanPhone}?text=${encodeURIComponent(waReplyMsg)}" target="_blank">Message Customer &rarr;</a>
+              <button class="btn-outline-success" onclick="sendWhatsAppBill('${ord.orderId}')">Send Bill on WhatsApp</button>
               <button class="btn-outline-danger" onclick="deleteSingleOrder(${idx})">Done / Remove</button>
             </div>
           </div>
         `;
       }).join("") + `</div>`;
+    }
+
+    // Text WhatsApp Bill Generator
+    function sendWhatsAppBill(orderId) {
+      const orders = getOrders();
+      const products = getProducts();
+      const ord = orders.find(o => o.orderId === orderId);
+      if (!ord) return;
+
+      let grandTotal = 0;
+      const itemLines = ord.items.map((item, i) => {
+        const prod = products.find(p => p.name === item.name);
+        const rate = prod ? prod.price : 0;
+        let itemTotal = 0;
+
+        if (prod && prod.unitType === "piece") {
+          itemTotal = rate * item.totalAmount;
+        } else if (prod) {
+          itemTotal = rate * (item.totalAmount / 1000);
+        }
+        grandTotal += itemTotal;
+
+        const sizeLabel = item.unitType === "piece" ? `${item.packSize} pc` : formatGrams(item.packSize);
+        const totalQtyLabel = item.unitType === "piece" ? `${item.totalAmount} pcs` : formatGrams(item.totalAmount);
+
+        return `${i + 1}. *${item.name}* \n   • Qty: ${item.packs} pack(s) × ${sizeLabel} (${totalQtyLabel}) \n   • Amount: ₹${Math.round(itemTotal)}`;
+      }).join("\n\n");
+
+      const cleanPhone = ord.customerPhone.replace(/\D/g, "");
+      const billText = 
+`॥ श्री ॥
+*SHREE HOMEMADE FOOD — INVOICE*
+Order ID: *${ord.orderId}*
+-----------------------------
+*Customer:* ${ord.customerName}
+*Need Date:* ${ord.needDate} (${ord.needTime})
+*Delivery:* ${ord.deliveryMethod}
+-----------------------------
+*BOUGHT ITEMS:*
+${itemLines}
+-----------------------------
+*GRAND TOTAL: ₹${Math.round(grandTotal)}*
+${ord.specs ? `\n*Note:* ${ord.specs}` : ""}
+-----------------------------
+Thank you for choosing Shree Homemade Food! 🌸`;
+
+      window.open(`https://wa.me/91${cleanPhone}?text=${encodeURIComponent(billText)}`, "_blank");
     }
 
     function deleteSingleOrder(index) {
@@ -394,7 +441,6 @@
       }).join("");
     }
 
-    // Drag & Drop / Upload handlers
     const dropZone = document.getElementById("dropZone");
     dropZone.addEventListener("dragover", (e) => { e.preventDefault(); dropZone.classList.add("dragover"); });
     dropZone.addEventListener("dragleave", () => { dropZone.classList.remove("dragover"); });
@@ -433,7 +479,6 @@
       reader.readAsDataURL(file);
     }
 
-    // Add or Edit Product
     function saveProduct(e) {
       e.preventDefault();
       const editId = document.getElementById("editProductId").value;
@@ -446,7 +491,6 @@
       let fallbackSvg = "data:image/svg+xml;utf8," + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="600" height="400"><rect width="600" height="400" fill="#F4ECE0"/><text x="300" y="205" font-family="Georgia, serif" font-size="24" font-weight="bold" fill="#6B1D1D" text-anchor="middle">${name}</text></svg>`);
 
       if (editId) {
-        // Editing existing product
         const prod = products.find(p => p.id === editId);
         if (prod) {
           prod.name = name;
@@ -457,15 +501,7 @@
         }
         alert(`"${name}" updated successfully!`);
       } else {
-        // Adding new product
-        const newProduct = {
-          id: "p-" + Date.now(),
-          name,
-          category,
-          price,
-          unitType,
-          image: uploadedImageDataUrl || fallbackSvg
-        };
+        const newProduct = { id: "p-" + Date.now(), name, category, price, unitType, image: uploadedImageDataUrl || fallbackSvg };
         products.push(newProduct);
         alert(`"${name}" added successfully!`);
       }
